@@ -1,7 +1,10 @@
 package com.herwaarden.osrsmate.dal.repositories;
 
 import com.herwaarden.osrsmate.dal.interfaces.IHighscoresContext;
-import com.herwaarden.osrsmate.models.userScore;
+import com.herwaarden.osrsmate.models.CharacterProgressModel;
+
+import java.util.List;
+
 
 public class HighscoresRepo implements IHighscoresContext {
 
@@ -12,7 +15,17 @@ public class HighscoresRepo implements IHighscoresContext {
     }
 
     @Override
-    public userScore getUserScoreByUsername(String username) {
+    public CharacterProgressModel getUserScoreByUsername(String username) {
         return context.getUserScoreByUsername(username);
+    }
+
+    @Override
+    public boolean addUserScore(CharacterProgressModel characterProgressModel) {
+        return context.addUserScore(characterProgressModel);
+    }
+
+    @Override
+    public List<CharacterProgressModel> getUserScoresByUsername(String username) {
+        return context.getUserScoresByUsername(username);
     }
 }

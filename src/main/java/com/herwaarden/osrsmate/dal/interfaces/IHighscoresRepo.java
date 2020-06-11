@@ -1,7 +1,13 @@
 package com.herwaarden.osrsmate.dal.interfaces;
 
-import com.herwaarden.osrsmate.models.userScore;
+import com.herwaarden.osrsmate.models.CharacterProgressModel;
+
+import java.util.List;
 
 public interface IHighscoresRepo {
-    userScore getUserScoreByUsername(String username);
+    CharacterProgressModel getUserScoreByUsername(String username);
+
+    boolean addUserScore(CharacterProgressModel characterProgressModel);
+
+    List<CharacterProgressModel> getUserScoresByUsername(String username);
 }

@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "characterProgress")
-public class userScore implements Serializable {
+public class CharacterProgressModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -90,7 +90,7 @@ public class userScore implements Serializable {
 
 
 
-    public userScore(){
+    public CharacterProgressModel(){
 
     }
 
