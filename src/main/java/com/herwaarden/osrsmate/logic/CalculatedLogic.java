@@ -6,8 +6,10 @@ import com.herwaarden.osrsmate.dal.interfaces.IQuestRepo;
 import com.herwaarden.osrsmate.factories.AchievementFactory;
 import com.herwaarden.osrsmate.factories.HighscoresFactory;
 import com.herwaarden.osrsmate.factories.QuestFactory;
+import com.herwaarden.osrsmate.models.AchievementModel;
 import com.herwaarden.osrsmate.models.CharacterProgressModel;
 import com.herwaarden.osrsmate.models.QuestModel;
+import viewModels.CalculatedAchievements;
 import viewModels.CalculatedQuests;
 import viewModels.Stat;
 
@@ -409,7 +411,390 @@ public class CalculatedLogic {
 
             questsToReturn.add(calculatedQuest);
         }
-
         return questsToReturn;
+    }
+
+    public List<CalculatedAchievements> getAchievements(String characterName) {
+        List<CalculatedAchievements> achievementsToReturn = new ArrayList<>();
+
+        List<AchievementModel> achievementModels = achievementRepo.getAchievements();
+        CharacterProgressModel characterProgressModel = highscoresRepo.getUserScoreByUsername(characterName);
+
+        for (AchievementModel achievementModel : achievementModels) {
+            CalculatedAchievements calculatedachievement = new CalculatedAchievements();
+            calculatedachievement.setAvailable(true);
+            calculatedachievement.setName(achievementModel.getRegion() + achievementModel.getDifficulty());
+
+            //Attack
+            if (achievementModel.getRequiredAttack() > characterProgressModel.getAttackExp() && achievementModel.getRequiredAttack() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat attackStat = new Stat();
+                attackStat.setStatName("Attack");
+                attackStat.setExperience(achievementModel.getRequiredAttack());
+                attackStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(attackStat);
+            } else if (achievementModel.getRequiredAttack() < characterProgressModel.getAttackExp() && achievementModel.getRequiredAttack() != 1) {
+                Stat attackStat = new Stat();
+                attackStat.setStatName("Attack");
+                attackStat.setExperience(achievementModel.getRequiredAttack());
+                attackStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(attackStat);
+            }
+
+            //Defence
+            if (achievementModel.getRequiredDefence() > characterProgressModel.getDefenceExp() && achievementModel.getRequiredDefence() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat defenceStat = new Stat();
+                defenceStat.setStatName("Defence");
+                defenceStat.setExperience(achievementModel.getRequiredDefence());
+                defenceStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(defenceStat);
+            } else if (achievementModel.getRequiredAttack() < characterProgressModel.getAttackExp() && achievementModel.getRequiredAttack() != 1) {
+                Stat defenceStat = new Stat();
+                defenceStat.setStatName("Defence");
+                defenceStat.setExperience(achievementModel.getRequiredDefence());
+                defenceStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(defenceStat);
+            }
+
+            //Strength
+            if (achievementModel.getRequiredStrength() > characterProgressModel.getStrengthExp() && achievementModel.getRequiredStrength() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat strengthStat = new Stat();
+                strengthStat.setStatName("Strength");
+                strengthStat.setExperience(achievementModel.getRequiredStrength());
+                strengthStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(strengthStat);
+            } else if (achievementModel.getRequiredStrength() < characterProgressModel.getStrengthExp() && achievementModel.getRequiredStrength() != 1) {
+                Stat strengthStat = new Stat();
+                strengthStat.setStatName("Strength");
+                strengthStat.setExperience(achievementModel.getRequiredStrength());
+                strengthStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(strengthStat);
+            }
+
+            //Hitpoints
+            if (achievementModel.getRequiredHitpoints() > characterProgressModel.getHitpointsExp() && achievementModel.getRequiredHitpoints() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat hitpointsStat = new Stat();
+                hitpointsStat.setStatName("Hitpoints");
+                hitpointsStat.setExperience(achievementModel.getRequiredHitpoints());
+                hitpointsStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(hitpointsStat);
+            } else if (achievementModel.getRequiredHitpoints() < characterProgressModel.getHitpointsExp() && achievementModel.getRequiredHitpoints() != 1) {
+                Stat hitpointsStat = new Stat();
+                hitpointsStat.setStatName("Hitpoints");
+                hitpointsStat.setExperience(achievementModel.getRequiredHitpoints());
+                hitpointsStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(hitpointsStat);
+            }
+
+            //Ranged
+            if (achievementModel.getRequiredRanged() > characterProgressModel.getRangedExp() && achievementModel.getRequiredRanged() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat rangedStat = new Stat();
+                rangedStat.setStatName("Ranged");
+                rangedStat.setExperience(achievementModel.getRequiredRanged());
+                rangedStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(rangedStat);
+            } else if (achievementModel.getRequiredRanged() < characterProgressModel.getRangedExp() && achievementModel.getRequiredRanged() != 1) {
+                Stat rangedStat = new Stat();
+                rangedStat.setStatName("Ranged");
+                rangedStat.setExperience(achievementModel.getRequiredRanged());
+                rangedStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(rangedStat);
+            }
+
+            //Prayer
+            if (achievementModel.getRequiredPrayer() > characterProgressModel.getPrayerExp() && achievementModel.getRequiredPrayer() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat prayerStat = new Stat();
+                prayerStat.setStatName("Prayer");
+                prayerStat.setExperience(achievementModel.getRequiredPrayer());
+                prayerStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(prayerStat);
+            } else if (achievementModel.getRequiredPrayer() < characterProgressModel.getPrayerExp() && achievementModel.getRequiredPrayer() != 1) {
+                Stat prayerStat = new Stat();
+                prayerStat.setStatName("Prayer");
+                prayerStat.setExperience(achievementModel.getRequiredPrayer());
+                prayerStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(prayerStat);
+            }
+
+            //Magic
+            if (achievementModel.getRequiredMagic() > characterProgressModel.getMagicExp() && achievementModel.getRequiredMagic() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat magicStat = new Stat();
+                magicStat.setStatName("Magic");
+                magicStat.setExperience(achievementModel.getRequiredMagic());
+                magicStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(magicStat);
+            } else if (achievementModel.getRequiredMagic() < characterProgressModel.getMagicExp() && achievementModel.getRequiredMagic() != 1) {
+                Stat magicStat = new Stat();
+                magicStat.setStatName("Magic");
+                magicStat.setExperience(achievementModel.getRequiredMagic());
+                magicStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(magicStat);
+            }
+
+            //Cooking
+            if (achievementModel.getRequiredCooking() > characterProgressModel.getCookingExp() && achievementModel.getRequiredCooking() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat cookingStat = new Stat();
+                cookingStat.setStatName("Cooking");
+                cookingStat.setExperience(achievementModel.getRequiredCooking());
+                cookingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(cookingStat);
+            } else if (achievementModel.getRequiredCooking() < characterProgressModel.getCookingExp() && achievementModel.getRequiredCooking() != 1) {
+                Stat cookingStat = new Stat();
+                cookingStat.setStatName("Cooking");
+                cookingStat.setExperience(achievementModel.getRequiredCooking());
+                cookingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(cookingStat);
+            }
+
+            //Woodcutting
+            if (achievementModel.getRequiredWoodcutting() > characterProgressModel.getWoodcuttingExp() && achievementModel.getRequiredWoodcutting() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat woodcuttingStat = new Stat();
+                woodcuttingStat.setStatName("Woodcutting");
+                woodcuttingStat.setExperience(achievementModel.getRequiredWoodcutting());
+                woodcuttingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(woodcuttingStat);
+            } else if (achievementModel.getRequiredWoodcutting() < characterProgressModel.getWoodcuttingExp() && achievementModel.getRequiredWoodcutting() != 1) {
+                Stat woodcuttingStat = new Stat();
+                woodcuttingStat.setStatName("Woodcutting");
+                woodcuttingStat.setExperience(achievementModel.getRequiredWoodcutting());
+                woodcuttingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(woodcuttingStat);
+            }
+
+            //fletching
+            if (achievementModel.getRequiredFletching() > characterProgressModel.getFletchingExp() && achievementModel.getRequiredFletching() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat fletchingStat = new Stat();
+                fletchingStat.setStatName("Fletching");
+                fletchingStat.setExperience(achievementModel.getRequiredFletching());
+                fletchingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(fletchingStat);
+            } else if (achievementModel.getRequiredFletching() < characterProgressModel.getFletchingExp() && achievementModel.getRequiredFletching() != 1) {
+                Stat fletchingStat = new Stat();
+                fletchingStat.setStatName("Fletching");
+                fletchingStat.setExperience(achievementModel.getRequiredFletching());
+                fletchingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(fletchingStat);
+            }
+
+            //Fishing
+            if (achievementModel.getRequiredFishing() > characterProgressModel.getFishingExp() && achievementModel.getRequiredFishing() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat FishingStat = new Stat();
+                FishingStat.setStatName("Fishing");
+                FishingStat.setExperience(achievementModel.getRequiredFishing());
+                FishingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(FishingStat);
+            } else if (achievementModel.getRequiredFishing() < characterProgressModel.getFishingExp() && achievementModel.getRequiredFishing() != 1) {
+                Stat FishingStat = new Stat();
+                FishingStat.setStatName("Fishing");
+                FishingStat.setExperience(achievementModel.getRequiredFishing());
+                FishingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(FishingStat);
+            }
+
+            //Firemaking
+            if (achievementModel.getRequiredFiremaking() > characterProgressModel.getFiremakingExp() && achievementModel.getRequiredFiremaking() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat FiremakingStat = new Stat();
+                FiremakingStat.setStatName("Firemaking");
+                FiremakingStat.setExperience(achievementModel.getRequiredFiremaking());
+                FiremakingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(FiremakingStat);
+            } else if (achievementModel.getRequiredFiremaking() < characterProgressModel.getFiremakingExp() && achievementModel.getRequiredFiremaking() != 1) {
+                Stat FiremakingStat = new Stat();
+                FiremakingStat.setStatName("Firemaking");
+                FiremakingStat.setExperience(achievementModel.getRequiredFiremaking());
+                FiremakingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(FiremakingStat);
+            }
+
+            //Crafting
+            if (achievementModel.getRequiredCrafting() > characterProgressModel.getCraftingExp() && achievementModel.getRequiredCrafting() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat CraftingStat = new Stat();
+                CraftingStat.setStatName("Crafting");
+                CraftingStat.setExperience(achievementModel.getRequiredCrafting());
+                CraftingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(CraftingStat);
+            } else if (achievementModel.getRequiredCrafting() < characterProgressModel.getCraftingExp() && achievementModel.getRequiredCrafting() != 1) {
+                Stat CraftingStat = new Stat();
+                CraftingStat.setStatName("Crafting");
+                CraftingStat.setExperience(achievementModel.getRequiredCrafting());
+                CraftingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(CraftingStat);
+            }
+
+            //Smithing
+            if (achievementModel.getRequiredSmithing() > characterProgressModel.getSmithingExp() && achievementModel.getRequiredSmithing() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat SmithingStat = new Stat();
+                SmithingStat.setStatName("Smithing");
+                SmithingStat.setExperience(achievementModel.getRequiredSmithing());
+                SmithingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(SmithingStat);
+            } else if (achievementModel.getRequiredSmithing() < characterProgressModel.getSmithingExp() && achievementModel.getRequiredSmithing() != 1) {
+                Stat SmithingStat = new Stat();
+                SmithingStat.setStatName("Smithing");
+                SmithingStat.setExperience(achievementModel.getRequiredSmithing());
+                SmithingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(SmithingStat);
+            }
+
+            //Mining
+            if (achievementModel.getRequiredMining() > characterProgressModel.getMiningExp() && achievementModel.getRequiredMining() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat MiningStat = new Stat();
+                MiningStat.setStatName("Mining");
+                MiningStat.setExperience(achievementModel.getRequiredMining());
+                MiningStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(MiningStat);
+            } else if (achievementModel.getRequiredMining() < characterProgressModel.getMiningExp() && achievementModel.getRequiredMining() != 1) {
+                Stat MiningStat = new Stat();
+                MiningStat.setStatName("Mining");
+                MiningStat.setExperience(achievementModel.getRequiredMining());
+                MiningStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(MiningStat);
+            }
+
+            //Herblore
+            if (achievementModel.getRequiredHerblore() > characterProgressModel.getHerbloreExp() && achievementModel.getRequiredHerblore() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat HerbloreStat = new Stat();
+                HerbloreStat.setStatName("Herblore");
+                HerbloreStat.setExperience(achievementModel.getRequiredHerblore());
+                HerbloreStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(HerbloreStat);
+            } else if (achievementModel.getRequiredHerblore() < characterProgressModel.getHerbloreExp() && achievementModel.getRequiredHerblore() != 1) {
+                Stat HerbloreStat = new Stat();
+                HerbloreStat.setStatName("Herblore");
+                HerbloreStat.setExperience(achievementModel.getRequiredHerblore());
+                HerbloreStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(HerbloreStat);
+            }
+
+            //Agility
+            if (achievementModel.getRequiredAgility() > characterProgressModel.getAgilityExp() && achievementModel.getRequiredAgility() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat AgilityStat = new Stat();
+                AgilityStat.setStatName("Agility");
+                AgilityStat.setExperience(achievementModel.getRequiredAgility());
+                AgilityStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(AgilityStat);
+            } else if (achievementModel.getRequiredAgility() < characterProgressModel.getAgilityExp() && achievementModel.getRequiredAgility() != 1) {
+                Stat AgilityStat = new Stat();
+                AgilityStat.setStatName("Agility");
+                AgilityStat.setExperience(achievementModel.getRequiredAgility());
+                AgilityStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(AgilityStat);
+            }
+
+            //Thieving
+            if (achievementModel.getRequiredThieving() > characterProgressModel.getThievingExp() && achievementModel.getRequiredThieving() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat ThievingStat = new Stat();
+                ThievingStat.setStatName("Thieving");
+                ThievingStat.setExperience(achievementModel.getRequiredThieving());
+                ThievingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(ThievingStat);
+            } else if (achievementModel.getRequiredThieving() < characterProgressModel.getThievingExp() && achievementModel.getRequiredThieving() != 1) {
+                Stat ThievingStat = new Stat();
+                ThievingStat.setStatName("Thieving");
+                ThievingStat.setExperience(achievementModel.getRequiredThieving());
+                ThievingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(ThievingStat);
+            }
+
+            //Slayer
+            if (achievementModel.getRequiredSlayer() > characterProgressModel.getSlayerExp() && achievementModel.getRequiredSlayer() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat SlayerStat = new Stat();
+                SlayerStat.setStatName("Slayer");
+                SlayerStat.setExperience(achievementModel.getRequiredSlayer());
+                SlayerStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(SlayerStat);
+            } else if (achievementModel.getRequiredSlayer() < characterProgressModel.getSlayerExp() && achievementModel.getRequiredSlayer() != 1) {
+                Stat SlayerStat = new Stat();
+                SlayerStat.setStatName("Slayer");
+                SlayerStat.setExperience(achievementModel.getRequiredSlayer());
+                SlayerStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(SlayerStat);
+            }
+
+            //Farming
+            if (achievementModel.getRequiredFarming() > characterProgressModel.getFarmingExp() && achievementModel.getRequiredFarming() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat FarmingStat = new Stat();
+                FarmingStat.setStatName("Farming");
+                FarmingStat.setExperience(achievementModel.getRequiredFarming());
+                FarmingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(FarmingStat);
+            } else if (achievementModel.getRequiredFarming() < characterProgressModel.getFarmingExp() && achievementModel.getRequiredFarming() != 1) {
+                Stat FarmingStat = new Stat();
+                FarmingStat.setStatName("Farming");
+                FarmingStat.setExperience(achievementModel.getRequiredFarming());
+                FarmingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(FarmingStat);
+            }
+
+            //Runecrafting
+            if (achievementModel.getRequiredRunecrafting() > characterProgressModel.getRunecraftExp() && achievementModel.getRequiredRunecrafting() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat RunecraftingStat = new Stat();
+                RunecraftingStat.setStatName("Runecrafting");
+                RunecraftingStat.setExperience(achievementModel.getRequiredRunecrafting());
+                RunecraftingStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(RunecraftingStat);
+            } else if (achievementModel.getRequiredRunecrafting() < characterProgressModel.getRunecraftExp() && achievementModel.getRequiredRunecrafting() != 1) {
+                Stat RunecraftingStat = new Stat();
+                RunecraftingStat.setStatName("Runecrafting");
+                RunecraftingStat.setExperience(achievementModel.getRequiredRunecrafting());
+                RunecraftingStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(RunecraftingStat);
+            }
+
+            //Hunter
+            if (achievementModel.getRequiredHunter() > characterProgressModel.getHunterExp() && achievementModel.getRequiredHunter() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat HunterStat = new Stat();
+                HunterStat.setStatName("Hunter");
+                HunterStat.setExperience(achievementModel.getRequiredHunter());
+                HunterStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(HunterStat);
+            } else if (achievementModel.getRequiredHunter() < characterProgressModel.getHunterExp() && achievementModel.getRequiredHunter() != 1) {
+                Stat HunterStat = new Stat();
+                HunterStat.setStatName("Hunter");
+                HunterStat.setExperience(achievementModel.getRequiredHunter());
+                HunterStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(HunterStat);
+            }
+
+            //Construction
+            if (achievementModel.getRequiredConstruction() > characterProgressModel.getConstructionExp() && achievementModel.getRequiredConstruction() != 1) {
+                calculatedachievement.setAvailable(false);
+                Stat ConstructionStat = new Stat();
+                ConstructionStat.setStatName("Construction");
+                ConstructionStat.setExperience(achievementModel.getRequiredConstruction());
+                ConstructionStat.setHighEnough(false);
+                calculatedachievement.getStatList().add(ConstructionStat);
+            } else if (achievementModel.getRequiredConstruction() < characterProgressModel.getConstructionExp() && achievementModel.getRequiredConstruction() != 1) {
+                Stat ConstructionStat = new Stat();
+                ConstructionStat.setStatName("Construction");
+                ConstructionStat.setExperience(achievementModel.getRequiredConstruction());
+                ConstructionStat.setHighEnough(true);
+                calculatedachievement.getStatList().add(ConstructionStat);
+            }
+
+            achievementsToReturn.add(calculatedachievement);
+        }
+        return achievementsToReturn;
     }
 }

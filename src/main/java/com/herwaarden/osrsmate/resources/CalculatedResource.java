@@ -8,6 +8,7 @@ import com.herwaarden.osrsmate.dal.repositories.HighscoresRepo;
 import com.herwaarden.osrsmate.dal.repositories.QuestRepo;
 import com.herwaarden.osrsmate.logic.CalculatedLogic;
 import org.springframework.web.bind.annotation.*;
+import viewModels.CalculatedAchievements;
 import viewModels.CalculatedQuests;
 
 import java.util.List;
@@ -26,5 +27,11 @@ public class CalculatedResource {
     @GetMapping(value = "/getQuestsByCharacterName/{characterName}")
     public List<CalculatedQuests> GetQuestsByCharacterName(@PathVariable("characterName")String characterName){
         return calculatedLogic.getQuests(characterName);
+    }
+
+    @CrossOrigin(origins = {"*"})
+    @GetMapping(value = "/getAchievementsByCharacterName/{characterName}")
+    public List<CalculatedAchievements> GetAchievementsByCharacterName(@PathVariable("characterName")String characterName){
+        return calculatedLogic.getAchievements(characterName);
     }
 }
