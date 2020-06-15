@@ -23,8 +23,9 @@ public class CharacterContextHibernate implements ICharacterContext {
         TypedQuery<CharacterModel> typedQuery = entityManager.createQuery(hql, CharacterModel.class);
         List<CharacterModel> characterModels = null;
         try {
+            System.out.println("result list:");
+            System.out.println(typedQuery.getResultList());
             characterModels = typedQuery.getResultList();
-
         }catch (Exception ex){
             String message = "Unexpected Exception in getCharacterByUID ";
             logger.log(Level.SEVERE, message, ex);

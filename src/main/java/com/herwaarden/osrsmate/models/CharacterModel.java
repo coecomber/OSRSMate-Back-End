@@ -22,6 +22,11 @@ public class CharacterModel implements Serializable {
     public CharacterModel() {
     }
 
+    public CharacterModel(String characterName, String userUID) {
+        this.characterName = characterName;
+        this.userUID = userUID;
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }

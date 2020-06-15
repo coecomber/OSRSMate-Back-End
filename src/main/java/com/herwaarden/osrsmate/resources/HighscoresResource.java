@@ -4,6 +4,7 @@ import com.herwaarden.osrsmate.dal.contexts.HighscoresContextHibernate;
 import com.herwaarden.osrsmate.dal.repositories.HighscoresRepo;
 import com.herwaarden.osrsmate.logic.HighscoresLogic;
 import com.herwaarden.osrsmate.models.CharacterProgressModel;
+import com.herwaarden.osrsmate.resources.HighscoresExceptions.NotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +18,21 @@ public class HighscoresResource {
     @CrossOrigin(origins = {"*"})
     @GetMapping(value = "/getUserScoreByUsername/{username}")
     public CharacterProgressModel GetUserScoreByUsername(@PathVariable("username")String username){
-        return highscoresLogic.getUserScoreByCharacterName(username);
+        CharacterProgressModel characterProgressModelToReturn = highscoresLogic.getUserScoreByCharacterName(username);
+        if(characterProgressModelToReturn == null){
+            throw new NotFoundException("username: " + username);
+        }
+        return characterProgressModelToReturn;
     }
 
     @CrossOrigin(origins = {"*"})
     @GetMapping(value = "/getUserScoresByUsername/{username}")
     public List<CharacterProgressModel> GetUserScoresByUsername(@PathVariable("username")String username){
-        return highscoresLogic.getUserScoresByCharacterName(username);
+        List<CharacterProgressModel> characterProgressModelsToReturn = highscoresLogic.getUserScoresByCharacterName(username);
+        if(characterProgressModelsToReturn == null){
+            throw new NotFoundException("username: " + username);
+        }
+        return characterProgressModelsToReturn;
     }
 
     @CrossOrigin(origins = {"*"})
