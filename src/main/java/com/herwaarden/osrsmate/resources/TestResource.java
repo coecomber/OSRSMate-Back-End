@@ -26,4 +26,10 @@ public class TestResource {
         value = id;
         return "Value is updated to " + value;
     }
+
+    @CrossOrigin(origins = {"*"})
+    @GetMapping(value = "/getTestValue2/")
+    public String GetTestValue2(){
+        return "test";
+    }
 }
